@@ -1,3 +1,4 @@
+/*  Reset e Fonte */
 * {
     margin: 0;
     padding: 0;
@@ -8,52 +9,60 @@
     line-height: 18px;
 }
 
+/*  Modo Escuro (Dark Mode) */
 body {
-    background-color: #E5E5E5;
+    background-color: #121212; 
+    color: #E0E0E0; 
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 10px;
+    align-items: flex-start; 
+    min-height: 100vh;
+    padding: 20px 10px; 
 }
 
+/*  Caixa principal */
 .container {
     width: 375px;
-    background-color: #F4F4F4;
+    background-color: #1E1E1E;  /* Fundo escuro mais suave */
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     padding: 20px;
+    transition: 0.3s;
 }
 
+/*  Cabeçalho */
 header {
-    background-color: #1B83E2;
+    background-color: #6200EA; /* Roxo vibrante */
     height: 66px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px 10px 0 0;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
     font-size: 20px;
-    color: #F4F4F4;
+    color: #FFFFFF;
     text-align: center;
 }
 
+/*  Área principal */
 main {
     padding: 20px;
 }
 
 label {
     font-size: 14px;
-    color: #777777;
+    color: #BBBBBB;
     display: block;
     margin-bottom: 8px;
 }
 
+/*  Campos de seleção e input */
 select, input {
-    background: #FFFFFF;
-    border: 1px solid #BBBBBB;
+    background: #252525;
+    border: 1px solid #6200EA; /* Roxo vibrante */
     border-radius: 4px;
     height: 48px;
     width: 100%;
@@ -61,33 +70,38 @@ select, input {
     outline: none;
     padding: 10px;
     font-size: 16px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    color: #E0E0E0;
+    box-shadow: 2px 2px 5px rgba(98, 0, 234, 0.3);
 }
 
+/*  Botão de conversão */
 button {
-    background: #1B83E2;
+    background: #6200EA;
     border-radius: 25px;
     height: 48px;
     cursor: pointer;
-    color: #F4F4F4;
+    color: #FFFFFF;
     font-weight: bold;
     font-size: 16px;
     border: none;
     width: 100%;
     margin-top: 20px;
     transition: 0.3s;
+    box-shadow: 0px 0px 10px rgba(98, 0, 234, 0.6);
 }
 
 button:hover {
-    opacity: 0.9;
+    background: #7B1FA2;
+    box-shadow: 0px 0px 15px rgba(123, 31, 162, 0.8);
 }
 
 button:active {
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
+/*  Área de conversão */
 section {
-    border: 1px solid #1B83E2;
+    border: 1px solid #6200EA;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
@@ -95,23 +109,26 @@ section {
     gap: 15px;
     padding: 20px;
     margin-top: 20px;
+    background: #252525;
+    box-shadow: 0px 4px 10px rgba(98, 0, 234, 0.3);
 }
 
+/*  Estilo das bandeiras e valores */
 .currency-container {
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 5px;
 }
 
 .currency-name {
     font-size: 14px;
-    color: #777777;
+    color: #BBBBBB;
 }
 
 .currency-value {
-    color: #1B83E2;
+    color: #E0E0E0;
     font-weight: bold;
     font-size: 20px;
 }
@@ -120,9 +137,10 @@ section {
     margin: 15px auto;
     display: block;
     width: 40px;
+    filter: drop-shadow(0px 0px 5px rgba(98, 0, 234, 0.7));
 }
 
-/* 📌 Responsividade para Tablets */
+/*  Responsividade para Tablets */
 @media (max-width: 768px) {
     .container {
         width: 90%;
@@ -135,7 +153,7 @@ section {
     }
 }
 
-/* 📌 Responsividade para Celulares */
+/*  Responsividade para Celulares */
 @media (max-width: 480px) {
     body {
         height: auto;
