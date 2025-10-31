@@ -298,7 +298,58 @@ const utils = {
 
 // Gerenciamento de taxas de câmbio
 const exchangeRates = {
-    // Buscar taxas da API
+    // Buscar taxas da AwesomeAPI (prioridade para moedas principais)
+    async fetchRatesFromAwesomeAPI() {
+        // Moedas principais disponíveis na AwesomeAPI
+        const awesomeAPICurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CNY', 'ARS', 'CAD', 'AUD', 'CHF', 'MXN', 'INR', 'RUB', 'BTC'];
+        const pairs = awesomeAPICurrencies.map(code => `${code}-BRL`).join(',');
+        
+        const response = await fetch(
+            `https://economia.awesomeapi.com.br/last/${pairs}`
+        );
+
+        if (!response.ok) {
+            throw new Error(`Erro na API: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const rates = {};
+        
+        awesomeAPICurrencies.forEach(code => {
+            const pairKey = `${code}BRL`;
+            const apiData = data[pairKey] || data[`${code}-BRL`];
+            if (apiData) {
+                rates[pairKey] = parseFloat(apiData.high || apiData.bid || apiData.ask || 0);
+            }
+        });
+
+        return rates;
+    },
+
+    // Buscar taxas usando ExchangeRate-API (fallback para moedas não disponíveis na AwesomeAPI)
+    async fetchRatesFromExchangeRateAPI() {
+        // API gratuita que não precisa de chave para uso básico
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/BRL');
+        
+        if (!response.ok) {
+            throw new Error(`Erro na API alternativa: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const rates = {};
+        
+        // Converter de rates[moeda] para rates[moedaBRL]
+        Object.keys(CURRENCIES).forEach(code => {
+            if (code !== 'BRL' && data.rates && data.rates[code]) {
+                // A API retorna BRL -> Moeda, precisamos inverter para Moeda -> BRL
+                rates[`${code}BRL`] = 1 / data.rates[code];
+            }
+        });
+
+        return rates;
+    },
+
+    // Buscar taxas da API (com fallback)
     async fetchRates() {
         try {
             // Verificar cache primeiro
@@ -306,39 +357,42 @@ const exchangeRates = {
                 return EXCHANGE_CACHE.rates;
             }
 
-            // Construir URL com todos os pares necessários
-            const currencyCodes = Object.keys(CURRENCIES).filter(code => code !== 'BRL');
-            const pairs = currencyCodes.map(code => `${code}-BRL`).join(',');
-            
-            const response = await fetch(
-                `https://economia.awesomeapi.com.br/last/${pairs}`
-            );
+            let rates = {};
 
-            if (!response.ok) {
-                throw new Error(`Erro na API: ${response.status}`);
+            // Tentar AwesomeAPI primeiro (melhor para moedas principais)
+            try {
+                const awesomeRates = await this.fetchRatesFromAwesomeAPI();
+                rates = { ...rates, ...awesomeRates };
+                console.log('Taxas da AwesomeAPI carregadas');
+            } catch (error) {
+                console.warn('Erro ao buscar da AwesomeAPI, tentando alternativa...', error);
             }
 
-            const data = await response.json();
-            
-            // Processar dados da API dinamicamente
-            const rates = {};
-            currencyCodes.forEach(code => {
-                const pairKey = `${code}BRL`;
-                const apiData = data[pairKey];
-                if (apiData) {
-                    rates[pairKey] = parseFloat(apiData.high || apiData.bid || apiData.ask || 0);
-                } else {
-                    // Tentar alternativa sem hífen
-                    const altKey = `${code}BRL`.replace(/-/g, '');
-                    const altData = data[altKey];
-                    if (altData) {
-                        rates[pairKey] = parseFloat(altData.high || altData.bid || altData.ask || 0);
-                    } else {
-                        console.warn(`Taxa não encontrada para ${code}`);
-                        rates[pairKey] = 0;
-                    }
+            // Buscar moedas faltantes da ExchangeRate-API
+            const currencyCodes = Object.keys(CURRENCIES).filter(code => code !== 'BRL');
+            const missingCurrencies = currencyCodes.filter(code => !rates[`${code}BRL`] || rates[`${code}BRL`] === 0);
+
+            if (missingCurrencies.length > 0) {
+                try {
+                    const exchangeRatesData = await this.fetchRatesFromExchangeRateAPI();
+                    
+                    // Preencher apenas as moedas que faltam
+                    missingCurrencies.forEach(code => {
+                        if (exchangeRatesData[`${code}BRL`]) {
+                            rates[`${code}BRL`] = exchangeRatesData[`${code}BRL`];
+                        }
+                    });
+                    console.log('Taxas faltantes carregadas da ExchangeRate-API');
+                } catch (error) {
+                    console.warn('Erro ao buscar da ExchangeRate-API:', error);
                 }
-            });
+            }
+
+            // Verificar se temos pelo menos algumas taxas
+            const validRates = Object.values(rates).filter(rate => rate > 0);
+            if (validRates.length === 0) {
+                throw new Error('Nenhuma taxa de câmbio disponível');
+            }
 
             // Salvar no cache
             EXCHANGE_CACHE.rates = rates;
