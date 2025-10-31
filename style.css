@@ -217,6 +217,13 @@ section {
     color: #BBBBBB;
 }
 
+.currency-emoji {
+    font-size: 48px;
+    display: block;
+    margin: 10px 0;
+    line-height: 1;
+}
+
 .currency-value {
     color: #E0E0E0;
     font-weight: bold;

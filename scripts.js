@@ -6,7 +6,8 @@ const CURRENCIES = {
         code: 'BRL',
         flag: './img/brasil 2.png',
         locale: 'pt-BR',
-        apiCode: 'BRL'
+        apiCode: 'BRL',
+        emoji: '🇧🇷'
     },
     'USD': {
         name: 'Dólar Americano',
@@ -14,7 +15,8 @@ const CURRENCIES = {
         code: 'USD',
         flag: './img/usa.png',
         locale: 'en-US',
-        apiCode: 'USD'
+        apiCode: 'USD',
+        emoji: '🇺🇸'
     },
     'EUR': {
         name: 'Euro',
@@ -22,7 +24,188 @@ const CURRENCIES = {
         code: 'EUR',
         flag: './img/euro.png',
         locale: 'pt-PT',
-        apiCode: 'EUR'
+        apiCode: 'EUR',
+        emoji: '🇪🇺'
+    },
+    'GBP': {
+        name: 'Libra Esterlina',
+        symbol: '£',
+        code: 'GBP',
+        flag: null,
+        locale: 'en-GB',
+        apiCode: 'GBP',
+        emoji: '🇬🇧'
+    },
+    'JPY': {
+        name: 'Iene Japonês',
+        symbol: '¥',
+        code: 'JPY',
+        flag: null,
+        locale: 'ja-JP',
+        apiCode: 'JPY',
+        emoji: '🇯🇵'
+    },
+    'CNY': {
+        name: 'Yuan Chinês',
+        symbol: '¥',
+        code: 'CNY',
+        flag: null,
+        locale: 'zh-CN',
+        apiCode: 'CNY',
+        emoji: '🇨🇳'
+    },
+    'ARS': {
+        name: 'Peso Argentino',
+        symbol: '$',
+        code: 'ARS',
+        flag: null,
+        locale: 'es-AR',
+        apiCode: 'ARS',
+        emoji: '🇦🇷'
+    },
+    'CAD': {
+        name: 'Dólar Canadense',
+        symbol: 'C$',
+        code: 'CAD',
+        flag: null,
+        locale: 'en-CA',
+        apiCode: 'CAD',
+        emoji: '🇨🇦'
+    },
+    'AUD': {
+        name: 'Dólar Australiano',
+        symbol: 'A$',
+        code: 'AUD',
+        flag: null,
+        locale: 'en-AU',
+        apiCode: 'AUD',
+        emoji: '🇦🇺'
+    },
+    'CHF': {
+        name: 'Franco Suíço',
+        symbol: 'Fr',
+        code: 'CHF',
+        flag: null,
+        locale: 'de-CH',
+        apiCode: 'CHF',
+        emoji: '🇨🇭'
+    },
+    'MXN': {
+        name: 'Peso Mexicano',
+        symbol: '$',
+        code: 'MXN',
+        flag: null,
+        locale: 'es-MX',
+        apiCode: 'MXN',
+        emoji: '🇲🇽'
+    },
+    'INR': {
+        name: 'Rúpia Indiana',
+        symbol: '₹',
+        code: 'INR',
+        flag: null,
+        locale: 'en-IN',
+        apiCode: 'INR',
+        emoji: '🇮🇳'
+    },
+    'RUB': {
+        name: 'Rublo Russo',
+        symbol: '₽',
+        code: 'RUB',
+        flag: null,
+        locale: 'ru-RU',
+        apiCode: 'RUB',
+        emoji: '🇷🇺'
+    },
+    'ZAR': {
+        name: 'Rand Sul-Africano',
+        symbol: 'R',
+        code: 'ZAR',
+        flag: null,
+        locale: 'en-ZA',
+        apiCode: 'ZAR',
+        emoji: '🇿🇦'
+    },
+    'KRW': {
+        name: 'Won Sul-Coreano',
+        symbol: '₩',
+        code: 'KRW',
+        flag: null,
+        locale: 'ko-KR',
+        apiCode: 'KRW',
+        emoji: '🇰🇷'
+    },
+    'TRY': {
+        name: 'Lira Turca',
+        symbol: '₺',
+        code: 'TRY',
+        flag: null,
+        locale: 'tr-TR',
+        apiCode: 'TRY',
+        emoji: '🇹🇷'
+    },
+    'NZD': {
+        name: 'Dólar Neozelandês',
+        symbol: 'NZ$',
+        code: 'NZD',
+        flag: null,
+        locale: 'en-NZ',
+        apiCode: 'NZD',
+        emoji: '🇳🇿'
+    },
+    'SGD': {
+        name: 'Dólar de Singapura',
+        symbol: 'S$',
+        code: 'SGD',
+        flag: null,
+        locale: 'en-SG',
+        apiCode: 'SGD',
+        emoji: '🇸🇬'
+    },
+    'HKD': {
+        name: 'Dólar de Hong Kong',
+        symbol: 'HK$',
+        code: 'HKD',
+        flag: null,
+        locale: 'zh-HK',
+        apiCode: 'HKD',
+        emoji: '🇭🇰'
+    },
+    'NOK': {
+        name: 'Coroa Norueguesa',
+        symbol: 'kr',
+        code: 'NOK',
+        flag: null,
+        locale: 'no-NO',
+        apiCode: 'NOK',
+        emoji: '🇳🇴'
+    },
+    'SEK': {
+        name: 'Coroa Sueca',
+        symbol: 'kr',
+        code: 'SEK',
+        flag: null,
+        locale: 'sv-SE',
+        apiCode: 'SEK',
+        emoji: '🇸🇪'
+    },
+    'DKK': {
+        name: 'Coroa Dinamarquesa',
+        symbol: 'kr',
+        code: 'DKK',
+        flag: null,
+        locale: 'da-DK',
+        apiCode: 'DKK',
+        emoji: '🇩🇰'
+    },
+    'PLN': {
+        name: 'Zloty Polonês',
+        symbol: 'zł',
+        code: 'PLN',
+        flag: null,
+        locale: 'pl-PL',
+        apiCode: 'PLN',
+        emoji: '🇵🇱'
     },
     'BTC': {
         name: 'Bitcoin',
@@ -30,7 +213,8 @@ const CURRENCIES = {
         code: 'BTC',
         flag: './img/btc.png',
         locale: 'en-US',
-        apiCode: 'BTC'
+        apiCode: 'BTC',
+        emoji: '₿'
     }
 };
 
@@ -122,8 +306,12 @@ const exchangeRates = {
                 return EXCHANGE_CACHE.rates;
             }
 
+            // Construir URL com todos os pares necessários
+            const currencyCodes = Object.keys(CURRENCIES).filter(code => code !== 'BRL');
+            const pairs = currencyCodes.map(code => `${code}-BRL`).join(',');
+            
             const response = await fetch(
-                "https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,EUR-USD,BTC-BRL,BTC-USD,BTC-EUR"
+                `https://economia.awesomeapi.com.br/last/${pairs}`
             );
 
             if (!response.ok) {
@@ -132,15 +320,25 @@ const exchangeRates = {
 
             const data = await response.json();
             
-            // Processar dados da API
-            const rates = {
-                USDBRL: parseFloat(data.USDBRL?.high || data.USDBRL?.bid || 0),
-                EURBRL: parseFloat(data.EURBRL?.high || data.EURBRL?.bid || 0),
-                EURUSD: parseFloat(data.EURUSD?.high || data.EURUSD?.bid || 0),
-                BTCBRL: parseFloat(data.BTCBRL?.high || data.BTCBRL?.bid || 0),
-                BTCUSD: parseFloat(data.BTCUSD?.high || data.BTCUSD?.bid || 0),
-                BTCEUR: parseFloat(data.BTCEUR?.high || data.BTCEUR?.bid || 0)
-            };
+            // Processar dados da API dinamicamente
+            const rates = {};
+            currencyCodes.forEach(code => {
+                const pairKey = `${code}BRL`;
+                const apiData = data[pairKey];
+                if (apiData) {
+                    rates[pairKey] = parseFloat(apiData.high || apiData.bid || apiData.ask || 0);
+                } else {
+                    // Tentar alternativa sem hífen
+                    const altKey = `${code}BRL`.replace(/-/g, '');
+                    const altData = data[altKey];
+                    if (altData) {
+                        rates[pairKey] = parseFloat(altData.high || altData.bid || altData.ask || 0);
+                    } else {
+                        console.warn(`Taxa não encontrada para ${code}`);
+                        rates[pairKey] = 0;
+                    }
+                }
+            });
 
             // Salvar no cache
             EXCHANGE_CACHE.rates = rates;
@@ -172,27 +370,29 @@ const exchangeRates = {
         // Converter moeda origem para BRL
         if (fromCurrency === 'BRL') {
             amountInBRL = amount;
-        } else if (fromCurrency === 'USD') {
-            amountInBRL = amount * rates.USDBRL;
-        } else if (fromCurrency === 'EUR') {
-            amountInBRL = amount * rates.EURBRL;
-        } else if (fromCurrency === 'BTC') {
-            amountInBRL = amount * rates.BTCBRL;
         } else {
-            throw new Error(`Moeda de origem não suportada: ${fromCurrency}`);
+            const rateKey = `${fromCurrency}BRL`;
+            const rate = rates[rateKey];
+            
+            if (!rate || rate === 0) {
+                throw new Error(`Taxa de câmbio não disponível para ${fromCurrency}`);
+            }
+            
+            amountInBRL = amount * rate;
         }
 
         // Converter BRL para moeda destino
         if (toCurrency === 'BRL') {
             return amountInBRL;
-        } else if (toCurrency === 'USD') {
-            return amountInBRL / rates.USDBRL;
-        } else if (toCurrency === 'EUR') {
-            return amountInBRL / rates.EURBRL;
-        } else if (toCurrency === 'BTC') {
-            return amountInBRL / rates.BTCBRL;
         } else {
-            throw new Error(`Moeda de destino não suportada: ${toCurrency}`);
+            const rateKey = `${toCurrency}BRL`;
+            const rate = rates[rateKey];
+            
+            if (!rate || rate === 0) {
+                throw new Error(`Taxa de câmbio não disponível para ${toCurrency}`);
+            }
+            
+            return amountInBRL / rate;
         }
     }
 };
@@ -239,6 +439,30 @@ const ui = {
 
     // Atualizar informações das moedas na UI
     updateCurrencyDisplay() {
+        const updateCurrencyElement = (currency, imgElement, emojiElement) => {
+            if (!currency || !imgElement) return;
+            
+            // Remover emoji anterior se existir
+            const existingEmoji = imgElement.parentElement.querySelector('.currency-emoji');
+            if (existingEmoji) {
+                existingEmoji.remove();
+            }
+            
+            if (currency.flag) {
+                // Usar imagem se disponível
+                imgElement.src = currency.flag;
+                imgElement.style.display = 'block';
+                imgElement.alt = `${currency.emoji || ''} ${currency.name}`;
+            } else if (currency.emoji) {
+                // Usar emoji se não houver imagem
+                imgElement.style.display = 'none';
+                const emojiSpan = document.createElement('span');
+                emojiSpan.className = 'currency-emoji';
+                emojiSpan.textContent = currency.emoji;
+                imgElement.parentElement.insertBefore(emojiSpan, imgElement);
+            }
+        };
+
         const fromCurrency = CURRENCIES[AppState.fromCurrency];
         const toCurrency = CURRENCIES[AppState.toCurrency];
 
@@ -246,20 +470,14 @@ const ui = {
             if (elements.currencyNameFrom) {
                 elements.currencyNameFrom.textContent = fromCurrency.name;
             }
-            if (elements.currencyImgFrom) {
-                elements.currencyImgFrom.src = fromCurrency.flag;
-                elements.currencyImgFrom.alt = `Bandeira ${fromCurrency.name}`;
-            }
+            updateCurrencyElement(fromCurrency, elements.currencyImgFrom);
         }
 
         if (toCurrency) {
             if (elements.currencyNameTo) {
                 elements.currencyNameTo.textContent = toCurrency.name;
             }
-            if (elements.currencyImgTo) {
-                elements.currencyImgTo.src = toCurrency.flag;
-                elements.currencyImgTo.alt = `Bandeira ${toCurrency.name}`;
-            }
+            updateCurrencyElement(toCurrency, elements.currencyImgTo);
         }
     },
 
