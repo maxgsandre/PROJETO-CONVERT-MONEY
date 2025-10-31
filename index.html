@@ -63,6 +63,17 @@
                     <img id="currency-img-to" src="./img/usa.png" alt="Bandeira">
                     <p class="currency-name" id="currency-name-to">Dólar Americano</p>
                     <p class="currency-value" id="currency-value-text">-</p>
+                    <button id="copy-button" type="button" class="copy-btn" aria-label="Copiar valor" title="Copiar valor convertido" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copiar
+                    </button>
+                </div>
+                <div class="exchange-rate-info" id="exchange-rate-info" style="display: none;">
+                    <span id="exchange-rate-text"></span>
+                    <span class="last-update" id="last-update-text"></span>
                 </div>
             </section>
 

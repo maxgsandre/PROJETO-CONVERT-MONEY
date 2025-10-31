@@ -247,7 +247,11 @@ const elements = {
     currencyNameTo: document.getElementById('currency-name-to'),
     currencyImgTo: document.getElementById('currency-img-to'),
     historyList: document.getElementById('history-list'),
-    clearHistoryBtn: document.getElementById('clear-history')
+    clearHistoryBtn: document.getElementById('clear-history'),
+    copyButton: document.getElementById('copy-button'),
+    exchangeRateInfo: document.getElementById('exchange-rate-info'),
+    exchangeRateText: document.getElementById('exchange-rate-text'),
+    lastUpdateText: document.getElementById('last-update-text')
 };
 
 // Utilitários
@@ -536,7 +540,7 @@ const ui = {
     },
 
     // Atualizar valores convertidos na tela
-    updateConvertedValues(originalAmount, convertedAmount) {
+    updateConvertedValues(originalAmount, convertedAmount, exchangeRate = null) {
         if (elements.realValueText) {
             elements.realValueText.textContent = utils.formatCurrency(
                 originalAmount, 
@@ -548,6 +552,56 @@ const ui = {
                 convertedAmount, 
                 AppState.toCurrency
             );
+        }
+
+        // Mostrar botão copiar
+        if (elements.copyButton && convertedAmount > 0) {
+            elements.copyButton.style.display = 'inline-flex';
+        }
+
+        // Atualizar taxa de câmbio
+        if (exchangeRate && elements.exchangeRateInfo && elements.exchangeRateText) {
+            const fromCurrency = CURRENCIES[AppState.fromCurrency];
+            const toCurrency = CURRENCIES[AppState.toCurrency];
+            
+            if (fromCurrency && toCurrency) {
+                const rateFormatted = exchangeRate.toFixed(4);
+                elements.exchangeRateText.textContent = 
+                    `1 ${fromCurrency.symbol} ${fromCurrency.code} = ${rateFormatted} ${toCurrency.code}`;
+                elements.exchangeRateInfo.style.display = 'block';
+            }
+        }
+
+        // Atualizar indicador de última atualização
+        if (EXCHANGE_CACHE.timestamp && elements.lastUpdateText) {
+            const updateDate = new Date(EXCHANGE_CACHE.timestamp);
+            const timeStr = updateDate.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            elements.lastUpdateText.textContent = `Atualizado às ${timeStr}`;
+        }
+    },
+
+    // Copiar valor para clipboard
+    async copyToClipboard(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            
+            // Feedback visual
+            if (elements.copyButton) {
+                const originalText = elements.copyButton.innerHTML;
+                elements.copyButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Copiado!';
+                elements.copyButton.style.background = '#4CAF50';
+                
+                setTimeout(() => {
+                    elements.copyButton.innerHTML = originalText;
+                    elements.copyButton.style.background = '';
+                }, 2000);
+            }
+        } catch (error) {
+            console.error('Erro ao copiar:', error);
+            ui.showError('Erro ao copiar valor. Tente novamente.');
         }
     }
 };
@@ -627,8 +681,16 @@ async function convertValues() {
             rates
         );
 
+        // Calcular taxa de câmbio (1 unidade da moeda origem = X unidades da moeda destino)
+        const exchangeRate = exchangeRates.calculateConversion(
+            1,
+            AppState.fromCurrency,
+            AppState.toCurrency,
+            rates
+        );
+
         // Atualizar UI
-        ui.updateConvertedValues(amount, convertedValue);
+        ui.updateConvertedValues(amount, convertedValue, exchangeRate);
 
         // Salvar no histórico
         history.saveToHistory(amount, convertedValue);
@@ -788,7 +850,7 @@ function init() {
     // Atualizar display inicial
     ui.updateCurrencyDisplay();
 
-    // Event listeners
+// Event listeners
     if (elements.button) {
         elements.button.addEventListener('click', convertValues);
     }
@@ -826,6 +888,16 @@ function init() {
     // Event listener para limpar histórico
     if (elements.clearHistoryBtn) {
         elements.clearHistoryBtn.addEventListener('click', () => history.clear());
+    }
+
+    // Event listener para copiar resultado
+    if (elements.copyButton) {
+        elements.copyButton.addEventListener('click', async () => {
+            const convertedText = elements.currencyValueText?.textContent;
+            if (convertedText && convertedText !== '-') {
+                await ui.copyToClipboard(convertedText);
+            }
+        });
     }
 
     // Renderizar histórico inicial
