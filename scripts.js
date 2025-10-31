@@ -52,6 +52,7 @@ const AppState = {
 // Elementos DOM
 const elements = {
     button: document.getElementById('convert-button'),
+    invertButton: document.getElementById('invert-button'),
     selectFrom: document.getElementById('currency-from-select'),
     selectTo: document.getElementById('currency-to-select'),
     inputAmount: document.getElementById('input-real'),
@@ -415,6 +416,9 @@ function init() {
     // Event listeners
     if (elements.button) {
         elements.button.addEventListener('click', convertValues);
+    }
+    if (elements.invertButton) {
+        elements.invertButton.addEventListener('click', invertCurrencies);
     }
     if (elements.selectFrom) {
         elements.selectFrom.addEventListener('change', changeCurrency);
