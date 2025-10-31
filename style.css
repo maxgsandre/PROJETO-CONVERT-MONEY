@@ -75,52 +75,6 @@ select, input {
     transition: all 0.3s ease;
 }
 
-/* Wrapper para select com busca */
-.currency-select-wrapper {
-    position: relative;
-}
-
-.currency-search {
-    margin-bottom: 8px;
-    height: 38px;
-    font-size: 14px;
-    padding-left: 36px;
-    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23BBBBBB' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='m21 21-4.35-4.35'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 10px center;
-    background-size: 16px;
-}
-
-.currency-search::placeholder {
-    color: #BBBBBB;
-    opacity: 0.6;
-}
-
-select[size] {
-    position: absolute;
-    z-index: 10;
-    max-height: 200px;
-    overflow-y: auto;
-    top: 48px;
-    left: 0;
-    right: 0;
-    border-radius: 4px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-select[size] option {
-    padding: 10px;
-    background: #252525;
-    color: #E0E0E0;
-}
-
-select[size] option:hover {
-    background: #6200EA;
-}
-
-select[size] option:checked {
-    background: #7B1FA2;
-}
 
 select:focus, input:focus {
     border-color: #7B1FA2;
