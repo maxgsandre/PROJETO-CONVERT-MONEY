@@ -244,6 +244,115 @@ section {
     filter: drop-shadow(0px 0px 5px rgba(98, 0, 234, 0.7));
 }
 
+/*  Histórico de conversões */
+.history-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #252525;
+    border: 1px solid #6200EA;
+    border-radius: 4px;
+}
+
+.history-section h2 {
+    color: #E0E0E0;
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.clear-btn {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 12px;
+    height: auto;
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+
+.history-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-empty {
+    text-align: center;
+    color: #BBBBBB;
+    padding: 20px;
+    font-style: italic;
+}
+
+.history-item {
+    background: #1E1E1E;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+}
+
+.history-item:hover {
+    border-color: #6200EA;
+    transform: translateX(5px);
+}
+
+.history-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-item-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.history-amount {
+    font-weight: bold;
+    font-size: 16px;
+    color: #E0E0E0;
+}
+
+.history-arrow {
+    color: #6200EA;
+    font-size: 18px;
+}
+
+.history-item-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #BBBBBB;
+}
+
+.history-currencies {
+    font-weight: 500;
+}
+
+.history-time {
+    opacity: 0.7;
+}
+
+/* Scrollbar personalizado para histórico */
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: #1E1E1E;
+    border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: #6200EA;
+    border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+    background: #7B1FA2;
+}
+
 /*  Responsividade para Tablets */
 @media (max-width: 768px) {
     .container {
