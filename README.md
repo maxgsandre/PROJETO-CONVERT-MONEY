@@ -8,7 +8,7 @@
 
 ### 🔄 Conversão de Moedas
 - **Conversão em tempo real** usando taxas de câmbio atualizadas
-- **Suporte para 4 moedas**: Real Brasileiro (BRL), Dólar Americano (USD), Euro (EUR) e Bitcoin (BTC)
+- **Suporte para 25 moedas**: BRL, USD, EUR, GBP, JPY, CNY, ARS, CAD, AUD, CHF, MXN, INR, RUB, ZAR, KRW, TRY, NZD, SGD, HKD, NOK, SEK, DKK, PLN, BTC e muito mais
 - **Conversão automática** enquanto você digita (com debounce para otimização)
 - **Formatação dinâmica** baseada na moeda selecionada
 
