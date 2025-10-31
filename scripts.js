@@ -777,10 +777,10 @@ async function convertValues() {
         );
 
         // Atualizar UI
-        ui.updateConvertedValues(amount, convertedValue, exchangeRate);
+        ui.updateConvertedValues(originalAmount, convertedValue, exchangeRate);
 
         // Salvar no histórico
-        history.saveToHistory(amount, convertedValue);
+        history.saveToHistory(originalAmount, convertedValue);
 
         // Armazenar dados da conversão para compartilhamento
         AppState.lastConversion = {
