@@ -16,49 +16,111 @@
             <h1>CodeClub Convert Money</h1>
         </header>
         <main>
-            <label>
+            <label for="currency-from-select">
                 Converter <b>de:</b>
-                <select id="currency-from-select">
-                    <option>R$ Real Brasileiro</option>
-                    <option>U$ Dolar Americano</option>
-                    <option>€ Euro</option>
+                <select id="currency-from-select" aria-label="Selecione a moeda de origem">
                 </select>
             </label>
 
-            <label>
+            <div class="invert-container">
+                <button id="invert-button" type="button" aria-label="Inverter moedas" title="Inverter moedas">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8V20m0 0l4-4m-4 4l-4-4"/>
+                    </svg>
+                </button>
+            </div>
+
+            <label for="currency-to-select">
                 Converter <b>para:</b>
-                <select id="currency-to-select">
-                    <option>U$ Dolar Americano</option>
-                    <option>€ Euro</option>
-                    <option>R$ Real Brasileiro</option>
+                <select id="currency-to-select" aria-label="Selecione a moeda de destino">
                 </select>
             </label>
 
-            <label>
+            <label for="input-real">
                 Valor
-                <input id="input-real" placeholder="RS 10.000,00">
+                <input 
+                    id="input-real" 
+                    type="text" 
+                    inputmode="decimal"
+                    placeholder="Ex: 1000.00"
+                    aria-label="Digite o valor a ser convertido"
+                    aria-required="true"
+                >
+                <div class="quick-values">
+                    <button type="button" class="quick-value-btn" data-value="100">100</button>
+                    <button type="button" class="quick-value-btn" data-value="500">500</button>
+                    <button type="button" class="quick-value-btn" data-value="1000">1K</button>
+                    <button type="button" class="quick-value-btn" data-value="5000">5K</button>
+                    <button type="button" class="quick-value-btn" data-value="10000">10K</button>
+                </div>
             </label>
 
-            <button id="convert-button" type="Button">Converter</button>
+            <div class="favorite-pairs" id="favorite-pairs">
+                <div class="favorite-pairs-header">
+                    <h3>Pares Favoritos</h3>
+                    <button id="add-favorite-btn" type="button" class="add-favorite-btn" aria-label="Adicionar par atual aos favoritos" title="Adicionar par atual aos favoritos">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Adicionar
+                    </button>
+                </div>
+                <div class="favorite-pairs-list" id="favorite-pairs-list"></div>
+            </div>
 
-            <section>
+            <button id="convert-button" type="button" aria-label="Converter valor">Converter</button>
+
+            <section aria-live="polite" aria-atomic="true">
                 <div class="currency-container">
-                    <img id="currency-img-from" src="./img/brasil 2.png" alt="Bandeira Brasil">
+                    <img id="currency-img-from" src="./img/brasil 2.png" alt="Bandeira">
                     <p class="currency-name" id="currency-name-from">Real</p>
-                    <p class="currency-value" id="real-value-text">$</p>
+                    <p class="currency-value" id="real-value-text">-</p>
                 </div>
 
-                <img class="arrow-img" src="./img/arrowP.png" alt="Seta">
+                <img class="arrow-img" src="./img/arrowP.png" alt="Seta indicando conversão">
 
                 <div class="currency-container">
-                    <img id="currency-img-to" src="./img/usa.png" alt="Bandeira USA">
-                    <p class="currency-name" id="currency-name-to">Dolar Americano</p>
-                    <p class="currency-value" id="currency-value-text">$</p>
+                    <img id="currency-img-to" src="./img/usa.png" alt="Bandeira">
+                    <p class="currency-name" id="currency-name-to">Dólar Americano</p>
+                    <p class="currency-value" id="currency-value-text">-</p>
+                    <button id="copy-button" type="button" class="copy-btn" aria-label="Copiar valor" title="Copiar valor convertido" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copiar
+                    </button>
                 </div>
+                <div class="exchange-rate-info" id="exchange-rate-info" style="display: none;">
+                    <span id="exchange-rate-text"></span>
+                    <span class="last-update" id="last-update-text"></span>
+                    <button id="share-button" type="button" class="share-btn" aria-label="Compartilhar conversão" title="Compartilhar conversão" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                        Compartilhar
+                    </button>
+                </div>
+            </section>
+
+            <section class="history-section" id="history-section" aria-label="Histórico de conversões">
+                <div class="history-header">
+                    <h2>Histórico</h2>
+                    <div class="history-actions">
+                        <button id="export-history-csv" type="button" class="export-btn" title="Exportar como CSV">CSV</button>
+                        <button id="export-history-json" type="button" class="export-btn" title="Exportar como JSON">JSON</button>
+                        <button id="clear-history" type="button" class="clear-btn">Limpar</button>
+                    </div>
+                </div>
+                <div id="history-list" class="history-list"></div>
             </section>
         </main>
     </div>
+    <script src="./scripts.js"></script>
 </body>
-<script src="./scripts.js"></script>
 </html>
-
