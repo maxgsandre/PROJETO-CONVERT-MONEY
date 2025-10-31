@@ -61,7 +61,9 @@ const elements = {
     currencyNameFrom: document.getElementById('currency-name-from'),
     currencyImgFrom: document.getElementById('currency-img-from'),
     currencyNameTo: document.getElementById('currency-name-to'),
-    currencyImgTo: document.getElementById('currency-img-to')
+    currencyImgTo: document.getElementById('currency-img-to'),
+    historyList: document.getElementById('history-list'),
+    clearHistoryBtn: document.getElementById('clear-history')
 };
 
 // Utilitários
@@ -356,8 +358,8 @@ async function convertValues() {
         // Atualizar UI
         ui.updateConvertedValues(amount, convertedValue);
 
-        // Salvar no histórico (será implementado depois)
-        // saveToHistory(amount, convertedValue);
+        // Salvar no histórico
+        history.saveToHistory(amount, convertedValue);
 
     } catch (error) {
         console.error('Erro na conversão:', error);
@@ -405,6 +407,107 @@ function invertCurrencies() {
     changeCurrency();
 }
 
+// Gerenciamento de histórico
+const history = {
+    // Carregar histórico do localStorage
+    loadHistory() {
+        try {
+            const stored = localStorage.getItem('convertHistory');
+            return stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.error('Erro ao carregar histórico:', error);
+            return [];
+        }
+    },
+
+    // Salvar histórico no localStorage
+    saveHistory(historyArray) {
+        try {
+            localStorage.setItem('convertHistory', JSON.stringify(historyArray));
+        } catch (error) {
+            console.error('Erro ao salvar histórico:', error);
+        }
+    },
+
+    // Adicionar conversão ao histórico
+    saveToHistory(originalAmount, convertedAmount) {
+        const historyArray = this.loadHistory();
+        const entry = {
+            from: AppState.fromCurrency,
+            to: AppState.toCurrency,
+            amount: originalAmount,
+            converted: convertedAmount,
+            timestamp: new Date().toISOString()
+        };
+
+        historyArray.unshift(entry);
+        
+        // Limitar a 20 conversões mais recentes
+        if (historyArray.length > 20) {
+            historyArray.pop();
+        }
+
+        this.saveHistory(historyArray);
+        this.render();
+    },
+
+    // Limpar histórico
+    clear() {
+        if (confirm('Deseja realmente limpar o histórico?')) {
+            this.saveHistory([]);
+            this.render();
+        }
+    },
+
+    // Renderizar histórico na tela
+    render() {
+        if (!elements.historyList) return;
+
+        const historyArray = this.loadHistory();
+        elements.historyList.innerHTML = '';
+
+        if (historyArray.length === 0) {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.className = 'history-empty';
+            emptyMsg.textContent = 'Nenhuma conversão realizada ainda.';
+            elements.historyList.appendChild(emptyMsg);
+            return;
+        }
+
+        historyArray.forEach(entry => {
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            
+            const fromCurrency = CURRENCIES[entry.from];
+            const toCurrency = CURRENCIES[entry.to];
+            
+            const date = new Date(entry.timestamp);
+            const timeStr = date.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            item.innerHTML = `
+                <div class="history-item-content">
+                    <div class="history-item-main">
+                        <span class="history-amount">${utils.formatCurrency(entry.amount, entry.from)}</span>
+                        <span class="history-arrow">→</span>
+                        <span class="history-amount">${utils.formatCurrency(entry.converted, entry.to)}</span>
+                    </div>
+                    <div class="history-item-meta">
+                        <span class="history-currencies">${fromCurrency?.symbol || entry.from} → ${toCurrency?.symbol || entry.to}</span>
+                        <span class="history-time">${timeStr}</span>
+                    </div>
+                </div>
+            `;
+
+            elements.historyList.appendChild(item);
+        });
+    }
+};
+
 // Inicialização
 function init() {
     // Popular selects
@@ -447,6 +550,14 @@ function init() {
             }
         });
     }
+
+    // Event listener para limpar histórico
+    if (elements.clearHistoryBtn) {
+        elements.clearHistoryBtn.addEventListener('click', () => history.clear());
+    }
+
+    // Renderizar histórico inicial
+    history.render();
 }
 
 // Aguardar DOM carregar
