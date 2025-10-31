@@ -230,7 +230,8 @@ const AppState = {
     fromCurrency: 'BRL',
     toCurrency: 'USD',
     isLoading: false,
-    lastError: null
+    lastError: null,
+    lastConversion: null
 };
 
 // Elementos DOM
@@ -257,7 +258,8 @@ const elements = {
     exchangeRateText: document.getElementById('exchange-rate-text'),
     lastUpdateText: document.getElementById('last-update-text'),
     favoritePairsList: document.getElementById('favorite-pairs-list'),
-    addFavoriteBtn: document.getElementById('add-favorite-btn')
+    addFavoriteBtn: document.getElementById('add-favorite-btn'),
+    shareButton: document.getElementById('share-button')
 };
 
 // Utilitários
@@ -587,6 +589,50 @@ const ui = {
             });
             elements.lastUpdateText.textContent = `Atualizado às ${timeStr}`;
         }
+
+        // Mostrar botão compartilhar
+        if (elements.shareButton && convertedAmount > 0) {
+            elements.shareButton.style.display = 'inline-flex';
+        }
+    },
+
+    // Compartilhar conversão
+    async shareConversion(originalAmount, convertedAmount, exchangeRate) {
+        try {
+            const fromCurrency = CURRENCIES[AppState.fromCurrency];
+            const toCurrency = CURRENCIES[AppState.toCurrency];
+            
+            const shareText = `${utils.formatCurrency(originalAmount, AppState.fromCurrency)} = ${utils.formatCurrency(convertedAmount, AppState.toCurrency)}\nTaxa: 1 ${fromCurrency.code} = ${exchangeRate.toFixed(4)} ${toCurrency.code}`;
+            
+            // Tentar usar Web Share API primeiro
+            if (navigator.share) {
+                await navigator.share({
+                    title: 'Conversão de Moedas',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copiar para clipboard
+                const shareData = `${shareText}\n\nCompartilhado via CodeClub Convert Money\n${window.location.href}`;
+                await this.copyToClipboard(shareData);
+                
+                if (elements.shareButton) {
+                    const originalText = elements.shareButton.innerHTML;
+                    elements.shareButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Link copiado!';
+                    elements.shareButton.style.background = '#4CAF50';
+                    
+                    setTimeout(() => {
+                        elements.shareButton.innerHTML = originalText;
+                        elements.shareButton.style.background = '';
+                    }, 2000);
+                }
+            }
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Erro ao compartilhar:', error);
+                ui.showError('Erro ao compartilhar. Tente novamente.');
+            }
+        }
     },
 
     // Copiar valor para clipboard
@@ -685,20 +731,21 @@ async function convertValues() {
     ui.showError(null);
     AppState.lastError = null;
 
-    // Validar entrada
-    const inputValue = elements.inputAmount?.value;
-    if (!inputValue || inputValue.trim() === '') {
-        ui.showError('Por favor, insira um valor para converter.');
-        return;
-    }
+        // Validar entrada
+        const inputValue = elements.inputAmount?.value;
+        if (!inputValue || inputValue.trim() === '') {
+            ui.showError('Por favor, insira um valor para converter.');
+            return;
+        }
 
-    const cleanedValue = utils.cleanInput(inputValue);
-    if (!utils.validateAmount(cleanedValue)) {
-        ui.showError('Por favor, insira um valor numérico válido maior que zero.');
-        return;
-    }
+        const cleanedValue = utils.cleanInput(inputValue);
+        if (!utils.validateAmount(cleanedValue)) {
+            ui.showError('Por favor, insira um valor numérico válido maior que zero.');
+            return;
+        }
 
-    const amount = parseFloat(cleanedValue);
+        const originalAmount = parseFloat(cleanedValue);
+        const amount = originalAmount;
 
     // Verificar se moedas são diferentes
     if (AppState.fromCurrency === AppState.toCurrency) {
@@ -734,6 +781,13 @@ async function convertValues() {
 
         // Salvar no histórico
         history.saveToHistory(amount, convertedValue);
+
+        // Armazenar dados da conversão para compartilhamento
+        AppState.lastConversion = {
+            amount: originalAmount,
+            converted: convertedValue,
+            exchangeRate: exchangeRate
+        };
 
     } catch (error) {
         console.error('Erro na conversão:', error);
@@ -1156,6 +1210,19 @@ function init() {
             const convertedText = elements.currencyValueText?.textContent;
             if (convertedText && convertedText !== '-') {
                 await ui.copyToClipboard(convertedText);
+            }
+        });
+    }
+
+    // Event listener para compartilhar
+    if (elements.shareButton) {
+        elements.shareButton.addEventListener('click', async () => {
+            if (AppState.lastConversion) {
+                await ui.shareConversion(
+                    AppState.lastConversion.amount,
+                    AppState.lastConversion.converted,
+                    AppState.lastConversion.exchangeRate
+                );
             }
         });
     }

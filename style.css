@@ -344,6 +344,35 @@ section {
     opacity: 0.7;
 }
 
+.share-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 12px;
+    background: #4CAF50;
+    border: none;
+    border-radius: 20px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    width: 100%;
+    justify-content: center;
+}
+
+.share-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 8px rgba(76, 175, 80, 0.4);
+}
+
+.share-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
 /* Pares favoritos */
 .favorite-pairs {
     margin: 20px 0;
