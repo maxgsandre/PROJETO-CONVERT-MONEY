@@ -239,6 +239,8 @@ const elements = {
     invertButton: document.getElementById('invert-button'),
     selectFrom: document.getElementById('currency-from-select'),
     selectTo: document.getElementById('currency-to-select'),
+    searchFrom: document.getElementById('currency-from-search'),
+    searchTo: document.getElementById('currency-to-search'),
     inputAmount: document.getElementById('input-real'),
     realValueText: document.getElementById('real-value-text'),
     currencyValueText: document.getElementById('currency-value-text'),
@@ -620,10 +622,14 @@ function populateCurrencySelects() {
     // Popular com moedas
     Object.keys(CURRENCIES).forEach(code => {
         const currency = CURRENCIES[code];
+        const displayText = `${currency.symbol} ${currency.name} (${code})`;
         
         const optionFrom = document.createElement('option');
         optionFrom.value = code;
-        optionFrom.textContent = `${currency.symbol} ${currency.name}`;
+        optionFrom.textContent = displayText;
+        optionFrom.dataset.name = currency.name.toLowerCase();
+        optionFrom.dataset.code = code.toLowerCase();
+        optionFrom.dataset.symbol = currency.symbol.toLowerCase();
         if (code === AppState.fromCurrency) {
             optionFrom.selected = true;
         }
@@ -631,12 +637,42 @@ function populateCurrencySelects() {
 
         const optionTo = document.createElement('option');
         optionTo.value = code;
-        optionTo.textContent = `${currency.symbol} ${currency.name}`;
+        optionTo.textContent = displayText;
+        optionTo.dataset.name = currency.name.toLowerCase();
+        optionTo.dataset.code = code.toLowerCase();
+        optionTo.dataset.symbol = currency.symbol.toLowerCase();
         if (code === AppState.toCurrency) {
             optionTo.selected = true;
         }
         toSelect.appendChild(optionTo);
     });
+}
+
+// Filtrar moedas por busca
+function filterCurrencies(searchInput, selectElement) {
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const options = selectElement.querySelectorAll('option');
+
+    options.forEach(option => {
+        const name = option.dataset.name || '';
+        const code = option.dataset.code || '';
+        const symbol = option.dataset.symbol || '';
+        
+        const matches = !searchTerm || 
+            name.includes(searchTerm) || 
+            code.includes(searchTerm) || 
+            symbol.includes(searchTerm);
+        
+        option.style.display = matches ? 'block' : 'none';
+    });
+
+    // Atualizar tamanho do select baseado em opções visíveis
+    const visibleOptions = Array.from(options).filter(opt => opt.style.display !== 'none');
+    if (visibleOptions.length > 0 && !searchTerm) {
+        selectElement.size = 1;
+    } else if (visibleOptions.length > 0) {
+        selectElement.size = Math.min(visibleOptions.length, 8);
+    }
 }
 
 // Função principal de conversão
@@ -850,7 +886,7 @@ function init() {
     // Atualizar display inicial
     ui.updateCurrencyDisplay();
 
-// Event listeners
+    // Event listeners
     if (elements.button) {
         elements.button.addEventListener('click', convertValues);
     }
@@ -859,9 +895,39 @@ function init() {
     }
     if (elements.selectFrom) {
         elements.selectFrom.addEventListener('change', changeCurrency);
+        elements.selectFrom.addEventListener('blur', () => {
+            if (elements.searchFrom) {
+                elements.searchFrom.value = '';
+                filterCurrencies(elements.searchFrom, elements.selectFrom);
+            }
+        });
     }
     if (elements.selectTo) {
         elements.selectTo.addEventListener('change', changeCurrency);
+        elements.selectTo.addEventListener('blur', () => {
+            if (elements.searchTo) {
+                elements.searchTo.value = '';
+                filterCurrencies(elements.searchTo, elements.selectTo);
+            }
+        });
+    }
+
+    // Busca de moedas
+    if (elements.searchFrom && elements.selectFrom) {
+        elements.searchFrom.addEventListener('input', () => {
+            filterCurrencies(elements.searchFrom, elements.selectFrom);
+        });
+        elements.searchFrom.addEventListener('focus', () => {
+            elements.selectFrom.size = Math.min(Object.keys(CURRENCIES).length, 8);
+        });
+    }
+    if (elements.searchTo && elements.selectTo) {
+        elements.searchTo.addEventListener('input', () => {
+            filterCurrencies(elements.searchTo, elements.selectTo);
+        });
+        elements.searchTo.addEventListener('focus', () => {
+            elements.selectTo.size = Math.min(Object.keys(CURRENCIES).length, 8);
+        });
     }
     if (elements.inputAmount) {
         // Conversão automática enquanto digita (com debounce)
