@@ -62,7 +62,7 @@ label {
 /*  Campos de seleção e input */
 select, input {
     background: #252525;
-    border: 1px solid #6200EA; /* Roxo vibrante */
+    border: 1px solid #6200EA;
     border-radius: 4px;
     height: 48px;
     width: 100%;
@@ -72,6 +72,21 @@ select, input {
     font-size: 16px;
     color: #E0E0E0;
     box-shadow: 2px 2px 5px rgba(98, 0, 234, 0.3);
+    transition: all 0.3s ease;
+}
+
+select:focus, input:focus {
+    border-color: #7B1FA2;
+    box-shadow: 0px 0px 10px rgba(123, 31, 162, 0.5);
+    transform: translateY(-1px);
+}
+
+input:invalid {
+    border-color: #B00020;
+}
+
+select:hover {
+    background: #2a2a2a;
 }
 
 /*  Botão de conversão */
@@ -86,17 +101,80 @@ button {
     border: none;
     width: 100%;
     margin-top: 20px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
     box-shadow: 0px 0px 10px rgba(98, 0, 234, 0.6);
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background: #7B1FA2;
     box-shadow: 0px 0px 15px rgba(123, 31, 162, 0.8);
+    transform: translateY(-2px);
 }
 
-button:active {
+button:active:not(:disabled) {
     opacity: 0.8;
+    transform: translateY(0);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/*  Botão inverter moedas */
+.invert-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+#invert-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #252525;
+    border: 2px solid #6200EA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #E0E0E0;
+    margin: 0;
+}
+
+#invert-button:hover {
+    background: #6200EA;
+    transform: rotate(180deg);
+    box-shadow: 0px 0px 15px rgba(98, 0, 234, 0.8);
+}
+
+#invert-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+/*  Mensagens de erro */
+.error-message {
+    background: #B00020;
+    color: #FFFFFF;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    animation: slideDown 0.3s ease;
+    border-left: 4px solid #FF1744;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /*  Área de conversão */
@@ -111,6 +189,18 @@ section {
     margin-top: 20px;
     background: #252525;
     box-shadow: 0px 4px 10px rgba(98, 0, 234, 0.3);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /*  Estilo das bandeiras e valores */
@@ -131,6 +221,20 @@ section {
     color: #E0E0E0;
     font-weight: bold;
     font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.currency-value:not(:empty) {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 .arrow-img {
