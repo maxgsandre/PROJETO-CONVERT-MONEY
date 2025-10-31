@@ -477,6 +477,34 @@ section {
     filter: drop-shadow(0px 0px 5px rgba(98, 0, 234, 0.7));
 }
 
+/* Seleção rápida de valores */
+.quick-values {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.quick-value-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: #252525;
+    border: 1px solid #6200EA;
+    border-radius: 16px;
+    color: #E0E0E0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: auto;
+    width: auto;
+    margin: 0;
+}
+
+.quick-value-btn:hover {
+    background: #6200EA;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
 /*  Histórico de conversões */
 .history-section {
     margin-top: 30px;
@@ -486,20 +514,42 @@ section {
     border-radius: 4px;
 }
 
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .history-section h2 {
     color: #E0E0E0;
     font-size: 18px;
-    margin-bottom: 15px;
-    text-align: center;
+    margin: 0;
 }
 
-.clear-btn {
+.history-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.clear-btn, .export-btn {
     width: auto;
-    padding: 8px 16px;
-    font-size: 12px;
+    padding: 6px 12px;
+    font-size: 11px;
     height: auto;
-    margin-bottom: 15px;
-    margin-top: 0;
+    margin: 0;
+    border-radius: 16px;
+}
+
+.export-btn {
+    background: #6200EA;
+    border: none;
+}
+
+.export-btn:hover {
+    background: #7B1FA2;
 }
 
 .history-list {

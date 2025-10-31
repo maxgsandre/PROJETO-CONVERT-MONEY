@@ -250,6 +250,8 @@ const elements = {
     currencyImgTo: document.getElementById('currency-img-to'),
     historyList: document.getElementById('history-list'),
     clearHistoryBtn: document.getElementById('clear-history'),
+    exportHistoryCSV: document.getElementById('export-history-csv'),
+    exportHistoryJSON: document.getElementById('export-history-json'),
     copyButton: document.getElementById('copy-button'),
     exchangeRateInfo: document.getElementById('exchange-rate-info'),
     exchangeRateText: document.getElementById('exchange-rate-text'),
@@ -954,6 +956,55 @@ const history = {
         }
     },
 
+    // Exportar histórico como CSV
+    exportCSV() {
+        const historyArray = this.loadHistory();
+        if (historyArray.length === 0) {
+            ui.showError('Nenhum histórico para exportar.');
+            return;
+        }
+
+        const headers = ['Data/Hora', 'De', 'Para', 'Valor Original', 'Valor Convertido'];
+        const rows = historyArray.map(entry => {
+            const date = new Date(entry.timestamp).toLocaleString('pt-BR');
+            const fromCurrency = CURRENCIES[entry.from]?.name || entry.from;
+            const toCurrency = CURRENCIES[entry.to]?.name || entry.to;
+            return [date, fromCurrency, toCurrency, entry.amount, entry.converted];
+        });
+
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.join(','))
+        ].join('\n');
+
+        this.downloadFile(csvContent, 'historico-conversoes.csv', 'text/csv');
+    },
+
+    // Exportar histórico como JSON
+    exportJSON() {
+        const historyArray = this.loadHistory();
+        if (historyArray.length === 0) {
+            ui.showError('Nenhum histórico para exportar.');
+            return;
+        }
+
+        const jsonContent = JSON.stringify(historyArray, null, 2);
+        this.downloadFile(jsonContent, 'historico-conversoes.json', 'application/json');
+    },
+
+    // Download de arquivo
+    downloadFile(content, filename, contentType) {
+        const blob = new Blob([content], { type: contentType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    },
+
     // Renderizar histórico na tela
     render() {
         if (!elements.historyList) return;
@@ -1076,10 +1127,28 @@ function init() {
         });
     }
 
-    // Event listener para limpar histórico
+    // Event listeners para histórico
     if (elements.clearHistoryBtn) {
         elements.clearHistoryBtn.addEventListener('click', () => history.clear());
     }
+    if (elements.exportHistoryCSV) {
+        elements.exportHistoryCSV.addEventListener('click', () => history.exportCSV());
+    }
+    if (elements.exportHistoryJSON) {
+        elements.exportHistoryJSON.addEventListener('click', () => history.exportJSON());
+    }
+
+    // Seleção rápida de valores
+    const quickValueButtons = document.querySelectorAll('.quick-value-btn');
+    quickValueButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const value = btn.dataset.value;
+            if (elements.inputAmount) {
+                elements.inputAmount.value = value;
+                elements.inputAmount.dispatchEvent(new Event('input'));
+            }
+        });
+    });
 
     // Event listener para copiar resultado
     if (elements.copyButton) {

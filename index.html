@@ -66,6 +66,13 @@
                     aria-label="Digite o valor a ser convertido"
                     aria-required="true"
                 >
+                <div class="quick-values">
+                    <button type="button" class="quick-value-btn" data-value="100">100</button>
+                    <button type="button" class="quick-value-btn" data-value="500">500</button>
+                    <button type="button" class="quick-value-btn" data-value="1000">1K</button>
+                    <button type="button" class="quick-value-btn" data-value="5000">5K</button>
+                    <button type="button" class="quick-value-btn" data-value="10000">10K</button>
+                </div>
             </label>
 
             <div class="favorite-pairs" id="favorite-pairs">
@@ -112,8 +119,14 @@
             </section>
 
             <section class="history-section" id="history-section" aria-label="Histórico de conversões">
-                <h2>Histórico</h2>
-                <button id="clear-history" type="button" class="clear-btn">Limpar histórico</button>
+                <div class="history-header">
+                    <h2>Histórico</h2>
+                    <div class="history-actions">
+                        <button id="export-history-csv" type="button" class="export-btn" title="Exportar como CSV">CSV</button>
+                        <button id="export-history-json" type="button" class="export-btn" title="Exportar como JSON">JSON</button>
+                        <button id="clear-history" type="button" class="clear-btn">Limpar</button>
+                    </div>
+                </div>
                 <div id="history-list" class="history-list"></div>
             </section>
         </main>
