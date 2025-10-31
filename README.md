@@ -2,7 +2,7 @@
 
 ![image](https://github.com/maxgsandre/PROJETO-CONVERT-MONEY/assets/115383243/e95ce8ef-19d0-4b56-93fa-abe84dea3ed9)
 
-**CodeClub Convert Money** é uma aplicação web moderna e completa para converter valores monetários entre diferentes moedas. Esta aplicação utiliza dados em tempo real da API AwesomeAPI para fornecer taxas de câmbio precisas.
+**CodeClub Convert Money** é uma aplicação web moderna e completa para converter valores monetários entre diferentes moedas. Esta aplicação utiliza dados em tempo real de múltiplas APIs (AwesomeAPI e ExchangeRate-API) para fornecer taxas de câmbio precisas e atualizadas.
 
 ## ✨ Recursos
 
@@ -52,7 +52,8 @@
 - **HTML5** com semântica e acessibilidade
 - **CSS3** com animações e design responsivo
 - **JavaScript (ES6+)** modular e organizado
-- **AwesomeAPI** para taxas de câmbio em tempo real
+- **AwesomeAPI** - API principal para taxas de câmbio em tempo real (moedas principais)
+- **ExchangeRate-API** - API alternativa para moedas adicionais (fallback automático)
 - **localStorage** para persistência do histórico
 
 ## 📁 Estrutura do Projeto
