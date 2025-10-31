@@ -344,6 +344,132 @@ section {
     opacity: 0.7;
 }
 
+/* Pares favoritos */
+.favorite-pairs {
+    margin: 20px 0;
+    padding: 15px;
+    background: #252525;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+}
+
+.favorite-pairs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.favorite-pairs h3 {
+    font-size: 16px;
+    color: #E0E0E0;
+    margin: 0;
+}
+
+.add-favorite-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: #6200EA;
+    border: none;
+    border-radius: 16px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    height: auto;
+    width: auto;
+    margin: 0;
+}
+
+.add-favorite-btn:hover {
+    background: #7B1FA2;
+    transform: translateY(-1px);
+}
+
+.add-favorite-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.favorite-pairs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.favorites-empty {
+    text-align: center;
+    color: #BBBBBB;
+    padding: 15px;
+    font-size: 13px;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.favorite-pair-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #1E1E1E;
+    border: 1px solid #3a3a3a;
+    border-radius: 20px;
+    padding: 4px;
+    transition: all 0.2s ease;
+}
+
+.favorite-pair-item:hover {
+    border-color: #6200EA;
+    transform: translateY(-2px);
+    box-shadow: 0px 2px 8px rgba(98, 0, 234, 0.3);
+}
+
+.favorite-pair-btn {
+    padding: 6px 12px;
+    background: transparent;
+    border: none;
+    color: #E0E0E0;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    height: auto;
+    width: auto;
+    margin: 0;
+}
+
+.favorite-pair-btn:hover {
+    background: #6200EA;
+    color: #FFFFFF;
+}
+
+.favorite-remove-btn {
+    padding: 4px;
+    background: transparent;
+    border: none;
+    color: #BBBBBB;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    height: auto;
+    width: auto;
+    margin: 0;
+}
+
+.favorite-remove-btn:hover {
+    background: #B00020;
+    color: #FFFFFF;
+}
+
+.favorite-remove-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
 .arrow-img {
     margin: 15px auto;
     display: block;

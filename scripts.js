@@ -253,7 +253,9 @@ const elements = {
     copyButton: document.getElementById('copy-button'),
     exchangeRateInfo: document.getElementById('exchange-rate-info'),
     exchangeRateText: document.getElementById('exchange-rate-text'),
-    lastUpdateText: document.getElementById('last-update-text')
+    lastUpdateText: document.getElementById('last-update-text'),
+    favoritePairsList: document.getElementById('favorite-pairs-list'),
+    addFavoriteBtn: document.getElementById('add-favorite-btn')
 };
 
 // Utilitários
@@ -777,6 +779,129 @@ function invertCurrencies() {
     changeCurrency();
 }
 
+// Gerenciamento de pares favoritos
+const favorites = {
+    // Carregar favoritos do localStorage
+    loadFavorites() {
+        try {
+            const stored = localStorage.getItem('currencyFavorites');
+            return stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.error('Erro ao carregar favoritos:', error);
+            return [];
+        }
+    },
+
+    // Salvar favoritos no localStorage
+    saveFavorites(favoritesArray) {
+        try {
+            localStorage.setItem('currencyFavorites', JSON.stringify(favoritesArray));
+        } catch (error) {
+            console.error('Erro ao salvar favoritos:', error);
+        }
+    },
+
+    // Adicionar par atual aos favoritos
+    addCurrentPair() {
+        const pair = `${AppState.fromCurrency}-${AppState.toCurrency}`;
+        const favoritesArray = this.loadFavorites();
+        
+        if (!favoritesArray.includes(pair)) {
+            favoritesArray.push(pair);
+            this.saveFavorites(favoritesArray);
+            this.render();
+            ui.showError(null); // Limpar erros
+        } else {
+            ui.showError('Este par já está nos favoritos!');
+        }
+    },
+
+    // Remover par dos favoritos
+    removePair(pair) {
+        const favoritesArray = this.loadFavorites();
+        const filtered = favoritesArray.filter(p => p !== pair);
+        this.saveFavorites(filtered);
+        this.render();
+    },
+
+    // Aplicar par favorito
+    applyPair(pair) {
+        const [from, to] = pair.split('-');
+        if (CURRENCIES[from] && CURRENCIES[to]) {
+            AppState.fromCurrency = from;
+            AppState.toCurrency = to;
+            
+            if (elements.selectFrom && elements.selectTo) {
+                elements.selectFrom.value = from;
+                elements.selectTo.value = to;
+            }
+            
+            changeCurrency();
+            
+            // Converter automaticamente se houver valor
+            const inputValue = elements.inputAmount?.value;
+            if (inputValue && utils.validateAmount(utils.cleanInput(inputValue))) {
+                convertValues();
+            }
+        }
+    },
+
+    // Renderizar favoritos
+    render() {
+        if (!elements.favoritePairsList) return;
+
+        const favoritesArray = this.loadFavorites();
+        elements.favoritePairsList.innerHTML = '';
+
+        if (favoritesArray.length === 0) {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.className = 'favorites-empty';
+            emptyMsg.textContent = 'Nenhum par favorito. Use o par atual e clique em "Adicionar aos Favoritos".';
+            elements.favoritePairsList.appendChild(emptyMsg);
+            return;
+        }
+
+        favoritesArray.forEach(pair => {
+            const [from, to] = pair.split('-');
+            const fromCurrency = CURRENCIES[from];
+            const toCurrency = CURRENCIES[to];
+
+            if (!fromCurrency || !toCurrency) return;
+
+            const item = document.createElement('div');
+            item.className = 'favorite-pair-item';
+            
+            item.innerHTML = `
+                <button class="favorite-pair-btn" data-pair="${pair}">
+                    <span class="favorite-pair-text">${fromCurrency.symbol} ${fromCurrency.code} → ${toCurrency.symbol} ${toCurrency.code}</span>
+                </button>
+                <button class="favorite-remove-btn" data-pair="${pair}" aria-label="Remover dos favoritos" title="Remover">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            `;
+
+            // Event listeners
+            const applyBtn = item.querySelector('.favorite-pair-btn');
+            const removeBtn = item.querySelector('.favorite-remove-btn');
+
+            if (applyBtn) {
+                applyBtn.addEventListener('click', () => this.applyPair(pair));
+            }
+            if (removeBtn) {
+                removeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removePair(pair);
+                });
+            }
+
+            elements.favoritePairsList.appendChild(item);
+        });
+    }
+};
+
 // Gerenciamento de histórico
 const history = {
     // Carregar histórico do localStorage
@@ -966,8 +1091,18 @@ function init() {
         });
     }
 
+    // Event listener para adicionar aos favoritos
+    if (elements.addFavoriteBtn) {
+        elements.addFavoriteBtn.addEventListener('click', () => {
+            favorites.addCurrentPair();
+        });
+    }
+
     // Renderizar histórico inicial
     history.render();
+    
+    // Renderizar favoritos inicial
+    favorites.render();
 }
 
 // Aguardar DOM carregar
